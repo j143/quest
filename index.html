@@ -64,6 +64,12 @@
              background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
              border-left-color: #4caf50;
         }
+        .boolean-builder {
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 1rem;
+            border-radius: .5rem;
+            margin-top: 1rem;
+        }
         .hidden {
             display: none;
         }
@@ -110,7 +116,7 @@
                                     <div class="card-body">
                                         <h5 class="card-title">Your Level</h5>
                                         <p class="display-4 fw-bold" id="level">1</p>
-                                        <p class="text-muted">LinkedIn Novice</p>
+                                        <p class="text-muted" id="level-title">LinkedIn Novice</p>
                                         <hr>
                                         <h6 class="card-subtitle mb-2 text-muted">Experience Points</h6>
                                         <p class="fs-4"><span id="xp">50</span> / <span id="xp-next-level">200</span> XP</p>
@@ -200,7 +206,47 @@
                     </div>
                 </div>
 
-                <!-- More quests will be added here -->
+                <!-- Quest 2: The Boolean Black Belt -->
+                <div class="card quest-card mb-4" id="quest2">
+                    <div class="card-body">
+                         <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="card-title">Quest: The Boolean Black Belt</h4>
+                                <p><strong>The Secret:</strong> Use Boolean operators (`AND`, `OR`, `NOT`) to create recruiter-level searches. This lets you combine keywords and exclude irrelevant results with precision.</p>
+                                <p><strong>Your Mission:</strong> Use the builder below to construct a Boolean query, then run the search to earn your XP.</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div id="quest2-incomplete">
+                                    <h5>+75 XP</h5>
+                                    <p>Complete the mission to earn</p>
+                                </div>
+                                <div id="quest2-complete" class="hidden">
+                                    <i class="fas fa-check-circle fa-3x text-success"></i>
+                                    <h5 class="mt-2">Quest Complete!</h5>
+                                    <p class="text-success fw-bold">+75 XP Earned</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="boolean-builder mt-3">
+                            <h6 class="text-center">Boolean Query Builder</h6>
+                            <div class="mb-2">
+                                <label class="form-label small">Find jobs with <strong class="text-primary">ALL</strong> of these words (AND):</label>
+                                <input type="text" id="bool-and" class="form-control form-control-sm" placeholder="e.g., senior manager">
+                            </div>
+                             <div class="mb-2">
+                                <label class="form-label small">Find jobs with <strong class="text-success">ANY</strong> of these words (OR):</label>
+                                <input type="text" id="bool-or" class="form-control form-control-sm" placeholder="e.g., fintech OR payments">
+                            </div>
+                             <div class="mb-2">
+                                <label class="form-label small"><strong class="text-danger">EXCLUDE</strong> these words (NOT):</label>
+                                <input type="text" id="bool-not" class="form-control form-control-sm" placeholder="e.g., intern OR junior">
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-success btn-sm" id="buildAndUseQueryBtn">Build & Use Query</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
@@ -220,10 +266,12 @@
         // --- Game State ---
         let gameState = {
             level: 1,
-            xp: 50,
+            xp: 0,
             xpForNextLevel: 200,
+            levelTitles: ["LinkedIn Novice", "Profile Polisher", "Search Specialist", "Networking Ninja", "LinkedIn Master"],
             quests: {
-                quest1_completed: false
+                quest1_completed: false,
+                quest2_completed: false,
             }
         };
 
@@ -236,31 +284,50 @@
         const generatedLinkTextarea = document.getElementById('generatedLink');
         
         const levelEl = document.getElementById('level');
+        const levelTitleEl = document.getElementById('level-title');
         const xpEl = document.getElementById('xp');
         const xpNextLevelEl = document.getElementById('xp-next-level');
         const xpProgressBar = document.getElementById('xp-progress-bar');
 
+        // Quest 1 Elements
         const completeQuest1Btn = document.getElementById('completeQuest1Btn');
         const quest1Card = document.getElementById('quest1');
         const quest1Incomplete = document.getElementById('quest1-incomplete');
         const quest1Complete = document.getElementById('quest1-complete');
+
+        // Quest 2 Elements
+        const quest2Card = document.getElementById('quest2');
+        const quest2Incomplete = document.getElementById('quest2-incomplete');
+        const quest2Complete = document.getElementById('quest2-complete');
+        const boolAndInput = document.getElementById('bool-and');
+        const boolOrInput = document.getElementById('bool-or');
+        const boolNotInput = document.getElementById('bool-not');
+        const buildAndUseQueryBtn = document.getElementById('buildAndUseQueryBtn');
+
 
         /**
          * Updates the UI with the current game state
          */
         function updateUI() {
             levelEl.textContent = gameState.level;
+            levelTitleEl.textContent = gameState.levelTitles[gameState.level - 1] || "LinkedIn Legend";
             xpEl.textContent = gameState.xp;
             xpNextLevelEl.textContent = gameState.xpForNextLevel;
             const progressPercentage = (gameState.xp / gameState.xpForNextLevel) * 100;
             xpProgressBar.style.width = `${progressPercentage}%`;
             xpProgressBar.setAttribute('aria-valuenow', progressPercentage);
 
-            // Update quest UI
+            // Update quest 1 UI
             if (gameState.quests.quest1_completed) {
                 quest1Card.classList.add('completed');
                 quest1Incomplete.classList.add('hidden');
                 quest1Complete.classList.remove('hidden');
+            }
+            // Update quest 2 UI
+            if (gameState.quests.quest2_completed) {
+                quest2Card.classList.add('completed');
+                quest2Incomplete.classList.add('hidden');
+                quest2Complete.classList.remove('hidden');
             }
         }
 
@@ -274,7 +341,7 @@
             if (gameState.xp >= gameState.xpForNextLevel) {
                 gameState.level++;
                 gameState.xp = gameState.xp - gameState.xpForNextLevel;
-                gameState.xpForNextLevel *= 1.5; // Increase XP requirement for next level
+                gameState.xpForNextLevel = Math.round(gameState.xpForNextLevel * 1.5); // Increase XP requirement for next level
             }
             updateUI();
         }
@@ -296,7 +363,15 @@
             if (timePosted === 'r3600' && !gameState.quests.quest1_completed) {
                 gameState.quests.quest1_completed = true;
                 addXp(50);
-                alert('Quest Complete! You earned 50 XP for mastering the "Last Hour" trick!');
+                alert('Quest 1 Complete! You earned 50 XP for mastering the "Last Hour" trick!');
+            }
+
+            // Check if this action completes Quest 2
+            const isBooleanQuery = keywords.includes('AND') || keywords.includes('OR') || keywords.includes('NOT');
+            if (isBooleanQuery && !gameState.quests.quest2_completed) {
+                 gameState.quests.quest2_completed = true;
+                 addXp(75);
+                 alert('Quest 2 Complete! You earned 75 XP for becoming a Boolean Black Belt!');
             }
 
             const params = new URLSearchParams();
@@ -315,21 +390,14 @@
         }
 
         /**
-         * Handles the click on the "Complete Quest" button.
-         * It navigates the user to the dashboard to perform the task.
+         * Navigates user to dashboard to complete Quest 1.
          */
         function handleCompleteQuest1() {
-            // Switch to the dashboard tab
             const dashboardTab = new bootstrap.Tab(document.getElementById('dashboard-tab'));
             dashboardTab.show();
-
-            // Focus the keywords input to guide the user
             keywordsInput.focus();
-            
-            // Set the time filter to "Last Hour"
             timePostedSelect.value = 'r3600';
 
-            // Show a temporary message to guide the user
             const guideAlert = document.createElement('div');
             guideAlert.className = 'alert alert-info alert-dismissible fade show';
             guideAlert.role = 'alert';
@@ -339,10 +407,47 @@
             `;
             document.getElementById('dashboard').prepend(guideAlert);
         }
+        
+        /**
+         * Builds a boolean query string and moves the user to the dashboard.
+         */
+        function buildAndUseQuery() {
+            const andTerms = boolAndInput.value.trim().split(' ').filter(Boolean).join(' AND ');
+            const orTerms = boolOrInput.value.trim().split(' ').filter(Boolean).join(' OR ');
+            const notTerms = boolNotInput.value.trim().split(' ').filter(Boolean).map(t => `NOT ${t}`).join(' ');
+
+            let queryParts = [];
+            if (andTerms) queryParts.push(`(${andTerms})`);
+            if (orTerms) queryParts.push(`(${orTerms})`);
+            if (notTerms) queryParts.push(notTerms);
+            
+            const finalQuery = queryParts.join(' AND ');
+
+            if (!finalQuery) {
+                alert("Please enter at least one term in the builder.");
+                return;
+            }
+
+            keywordsInput.value = finalQuery;
+            
+            const dashboardTab = new bootstrap.Tab(document.getElementById('dashboard-tab'));
+            dashboardTab.show();
+            
+            const guideAlert = document.createElement('div');
+            guideAlert.className = 'alert alert-success alert-dismissible fade show';
+            guideAlert.role = 'alert';
+            guideAlert.innerHTML = `
+                <strong>Awesome!</strong> Your Boolean query has been built. Now just hit "Generate & Open Link" to complete your quest.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.getElementById('dashboard').prepend(guideAlert);
+        }
+
 
         // --- Event Listeners ---
         generateLinkBtn.addEventListener('click', generateLink);
         completeQuest1Btn.addEventListener('click', handleCompleteQuest1);
+        buildAndUseQueryBtn.addEventListener('click', buildAndUseQuery);
 
         // --- Initial Load ---
         document.addEventListener('DOMContentLoaded', () => {
