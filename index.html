@@ -27,10 +27,6 @@
             box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
             transition: all 0.3s cubic-bezier(.25,.8,.25,1);
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 14px 28px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.22);
-        }
         .quest-title {
             color: #0a66c2; /* LinkedIn Blue */
         }
@@ -43,23 +39,19 @@
             background-color: #004182;
             border-color: #004182;
         }
+        .progress {
+            height: 1rem;
+        }
         .progress-bar {
             background-color: #0a66c2;
         }
         .badge-icon {
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: #ffc107;
-            display: inline-block;
             transition: transform 0.2s;
         }
         .badge-icon:hover {
             transform: scale(1.2);
-        }
-        .nav-link {
-            font-weight: 600;
-        }
-        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-            background-color: #0a66c2;
         }
         .quest-card {
             background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
@@ -81,243 +73,163 @@
 
         /* Animation Modal Styles */
         .animation-modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            z-index: 1050;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6); z-index: 1050; display: flex;
+            justify-content: center; align-items: center; opacity: 0;
+            transition: opacity 0.3s ease-in-out; pointer-events: none;
         }
-        .animation-modal-backdrop.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .animation-modal-backdrop.show { opacity: 1; pointer-events: auto; }
         .animation-canvas {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 1rem;
-            width: 90%;
-            max-width: 800px;
-            text-align: center;
-            position: relative;
+            background-color: #fff; padding: 2rem; border-radius: 1rem;
+            width: 90%; max-width: 800px; text-align: center; position: relative;
         }
         .fake-browser {
-            border: 3px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-            padding: 1rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            margin-top: 1.5rem;
+            border: 3px solid #ddd; border-radius: 8px; background-color: #f9f9f9;
+            padding: 1rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-top: 1.5rem;
         }
         .address-bar {
-            background-color: #e9ecef;
-            border-radius: 4px;
-            padding: 0.5rem;
-            font-family: monospace;
-            font-size: 0.9rem;
-            text-align: left;
-            white-space: nowrap;
-            overflow: hidden;
-            border: 1px solid #ccc;
+            background-color: #e9ecef; border-radius: 4px; padding: 0.5rem;
+            font-family: monospace; font-size: 0.9rem; text-align: left;
+            white-space: nowrap; overflow: hidden; border: 1px solid #ccc;
         }
         .address-bar .url-param {
-            background-color: #ffc107;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-weight: bold;
+            background-color: #ffc107; padding: 2px 4px;
+            border-radius: 3px; font-weight: bold;
         }
-        .animation-text {
-            margin-top: 1rem;
-            font-size: 1.1rem;
-            font-weight: 500;
-            min-height: 50px;
-        }
-
-        /* Keyframe Animations */
-        @keyframes fade-in {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes highlight-change {
-            0% { background-color: #ffc107; }
-            50% { background-color: #28a745; color: white; }
-            100% { background-color: #ffc107; }
-        }
-        .anim-step.active {
-            animation: fade-in 0.5s forwards;
-        }
-
+        .animation-text { margin-top: 1rem; font-size: 1.1rem; font-weight: 500; min-height: 50px; }
+        @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes highlight-change { 0% { background-color: #ffc107; } 50% { background-color: #28a745; color: white; } 100% { background-color: #ffc107; } }
+        .anim-step.active { animation: fade-in 0.5s forwards; }
     </style>
 </head>
 <body>
 
-    <!-- Navigation Bar -->
+    <!-- Navigation Bar with Integrated Progress -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold quest-title" href="#"><i class="fas fa-shield-alt"></i> LinkedIn Quest</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="nav nav-pills ms-auto" id="main-nav" role="tablist">
-                    <li class="nav-item" role="presentation"><a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab">Dashboard</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" id="quests-tab" data-bs-toggle="tab" href="#quests" role="tab">Quests</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" id="tracker-tab" data-bs-toggle="tab" href="#tracker" role="tab">Job Tracker</a></li>
-                </ul>
+            <div class="d-flex align-items-center w-50 ms-auto">
+                <div class="me-3">
+                    <span class="fw-bold" id="level-title">Lvl 1</span>
+                    <small class="text-muted" id="xp-text">0/200 XP</small>
+                </div>
+                <div class="progress flex-grow-1 me-3" title="Your Progress">
+                    <div id="xp-progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div id="badges-container" class="d-flex align-items-center">
+                    <!-- Badges will be dynamically added here -->
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
     <div class="container mt-4">
-        <div class="tab-content" id="myTabContent">
-            <!-- Dashboard View -->
-            <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-                 <div class="row">
-                    <div class="col-lg-8">
-                        <h1 class="mb-4">Your Dashboard</h1>
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Your Level</h5>
-                                        <p class="display-4 fw-bold" id="level">1</p>
-                                        <p class="text-muted" id="level-title">LinkedIn Novice</p>
-                                        <hr>
-                                        <h6 class="card-subtitle mb-2 text-muted">Experience Points</h6>
-                                        <p class="fs-4"><span id="xp">0</span> / <span id="xp-next-level">200</span> XP</p>
-                                        <div class="progress">
-                                            <div id="xp-progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body">
-                                        <h5 class="card-title">Achievements</h5>
-                                        <div class="d-flex justify-content-start align-items-center mt-3" id="badges-container"></div>
-                                        <p class="mt-3 text-muted" id="badge-prompt">Complete quests to earn badges!</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="card sticky-top" style="top: 80px;">
-                            <div class="card-body">
-                                <h5 class="card-title text-center mb-4">🚀 LinkedIn Deep Link Generator</h5>
-                                <div class="mb-3"><label for="keywords" class="form-label">Keywords</label><input type="text" class="form-control" id="keywords" placeholder="e.g., Product Manager"></div>
-                                <div class="mb-3"><label for="location" class="form-label">Location</label><input type="text" class="form-control" id="location" placeholder="e.g., San Francisco"></div>
-                                <div class="mb-3"><label for="time_posted" class="form-label">Posted Within</label><select class="form-select" id="time_posted"><option value="r3600" selected>Last Hour</option><option value="r86400">Last 24 Hours</option><option value="r604800">Last Week</option></select></div>
-                                <div class="d-grid"><button id="generateLinkBtn" class="btn btn-primary">Generate & Open Link</button></div>
-                                <div id="generatedLinkContainer" class="mt-4 hidden"><label class="form-label">Your Link:</label><textarea id="generatedLink" class="form-control" rows="3" readonly></textarea></div>
-                            </div>
+        
+        <!-- Collapsible Search Tool -->
+        <div class="accordion mb-4" id="searchToolAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <i class="fas fa-search me-2"></i> Open Search Tool
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#searchToolAccordion">
+                    <div class="accordion-body">
+                        <div class="card card-body">
+                            <h5 class="card-title text-center mb-4">🚀 LinkedIn Deep Link Generator</h5>
+                            <div class="mb-3"><label for="keywords" class="form-label">Keywords</label><input type="text" class="form-control" id="keywords" placeholder="e.g., Product Manager"></div>
+                            <div class="mb-3"><label for="location" class="form-label">Location</label><input type="text" class="form-control" id="location" placeholder="e.g., San Francisco"></div>
+                            <div class="mb-3"><label for="time_posted" class="form-label">Posted Within</label><select class="form-select" id="time_posted"><option value="r3600" selected>Last Hour</option><option value="r86400">Last 24 Hours</option><option value="r604800">Last Week</option></select></div>
+                            <div class="d-grid"><button id="generateLinkBtn" class="btn btn-primary">Generate & Open Link</button></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Quests View -->
-            <div class="tab-pane fade" id="quests" role="tabpanel" aria-labelledby="quests-tab">
-                <h1 class="mb-4">Your Quests</h1>
-                <p class="lead mb-4">Complete these quests to level up your LinkedIn skills and earn XP!</p>
-                
-                <!-- Quest 1: The 'Last Hour' Advantage -->
-                <div class="card quest-card mb-4" id="quest1">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h4 class="card-title">Quest: The "Last Hour" Advantage</h4>
-                                <p><strong>The Secret:</strong> See jobs before anyone else by mastering a hidden LinkedIn URL trick. Let us show you how!</p>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <div id="quest1-incomplete">
-                                    <h5>+50 XP</h5>
-                                    <button class="btn btn-primary" id="startQuest1Btn">Show Me The Trick!</button>
-                                </div>
-                                <div id="quest1-complete" class="hidden">
-                                    <i class="fas fa-check-circle fa-3x text-success"></i>
-                                    <h5 class="mt-2">Quest Complete!</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        </div>
 
-                <!-- Quest 2: The Boolean Black Belt -->
-                <div class="card quest-card mb-4" id="quest2">
-                    <div class="card-body">
-                         <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h4 class="card-title">Quest: The Boolean Black Belt</h4>
-                                <p><strong>The Secret:</strong> Use `AND`, `OR`, `NOT` to create recruiter-level searches and find exactly what you're looking for.</p>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <div id="quest2-incomplete"><h5>+75 XP</h5></div>
-                                <div id="quest2-complete" class="hidden"><i class="fas fa-check-circle fa-3x text-success"></i><h5 class="mt-2">Quest Complete!</h5></div>
-                            </div>
-                        </div>
-                        <div class="quest-builder mt-3">
-                            <div class="mb-2"><input type="text" id="bool-and" class="form-control" placeholder="MUST include (e.g., senior manager)"></div>
-                            <div class="mb-2"><input type="text" id="bool-or" class="form-control" placeholder="Can include ANY of (e.g., fintech payments)"></div>
-                            <div class="mb-2"><input type="text" id="bool-not" class="form-control" placeholder="EXCLUDE these (e.g., intern junior)"></div>
-                            <div class="d-grid"><button class="btn btn-success" id="buildAndUseQueryBtn">Build & Use Query</button></div>
-                        </div>
+        <!-- Quests -->
+        <h1 class="mb-4">Your Quests</h1>
+        
+        <!-- Quest 1: The 'Last Hour' Advantage -->
+        <div class="card quest-card mb-4" id="quest1">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h4 class="card-title">Quest: The "Last Hour" Advantage</h4>
+                        <p><strong>The Secret:</strong> See jobs before anyone else by mastering a hidden LinkedIn URL trick. Let us show you how!</p>
                     </div>
-                </div>
-
-                <!-- Quest 3: The Profile Power-Up -->
-                <div class="card quest-card mb-4" id="quest3">
-                    <div class="card-body">
-                         <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h4 class="card-title">Quest: The Profile Power-Up</h4>
-                                <p><strong>The Secret:</strong> A keyword-optimized profile gets you found by recruiters. Your Headline and "About" section are prime real estate.</p>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <div id="quest3-incomplete"><h5>+100 XP</h5></div>
-                                <div id="quest3-complete" class="hidden"><i class="fas fa-check-circle fa-3x text-success"></i><h5 class="mt-2">Quest Complete!</h5></div>
-                            </div>
+                    <div class="col-md-4 text-center">
+                        <div id="quest1-incomplete">
+                            <h5>+50 XP</h5>
+                            <button class="btn btn-primary" id="startQuest1Btn">Show Me The Trick!</button>
                         </div>
-                        <div class="quest-builder mt-3">
-                            <div class="mb-3"><label class="form-label"><strong>1. Craft Your Headline</strong></label><input type="text" id="profile-headline" class="form-control" placeholder="e.g., Product Manager driving user growth in SaaS"></div>
-                            <div class="mb-3"><label class="form-label"><strong>2. Write Your "About" Summary</strong></label><textarea id="profile-about" class="form-control" rows="4" placeholder="Focus on your value and accomplishments"></textarea></div>
-                            <div class="d-grid"><button class="btn btn-success" id="completeQuest3Btn">Complete Profile Quest</button></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Quest 4: The Network Navigator -->
-                <div class="card quest-card mb-4" id="quest4">
-                    <div class="card-body">
-                         <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h4 class="card-title">Quest: The Network Navigator</h4>
-                                <p><strong>The Secret:</strong> Don't just apply to jobs, apply to people. Find recruiters and hiring managers at your target companies to stand out.</p>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <div id="quest4-incomplete"><h5>+100 XP</h5></div>
-                                <div id="quest4-complete" class="hidden"><i class="fas fa-check-circle fa-3x text-success"></i><h5 class="mt-2">Quest Complete!</h5></div>
-                            </div>
-                        </div>
-                        <div class="quest-builder mt-3">
-                            <div class="mb-3"><label class="form-label"><strong>Find Key Contacts at a Company</strong></label><input type="text" id="company-name-input" class="form-control" placeholder="e.g., Google, Microsoft"></div>
-                            <div class="d-grid"><button class="btn btn-success" id="findContactsBtn">Find Key Contacts</button></div>
-                        </div>
+                        <div id="quest1-complete" class="hidden"><i class="fas fa-check-circle fa-3x text-success"></i><h5 class="mt-2">Quest Complete!</h5></div>
                     </div>
                 </div>
             </div>
-            <!-- Job Tracker View -->
-            <div class="tab-pane fade" id="tracker" role="tabpanel" aria-labelledby="tracker-tab">
-                <h1 class="mb-4">Job Tracker</h1>
-                <p class="text-center text-muted">This feature is coming soon!</p>
+        </div>
+
+        <!-- Quest 2: The Boolean Black Belt -->
+        <div class="card quest-card mb-4" id="quest2">
+            <div class="card-body">
+                 <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h4 class="card-title">Quest: The Boolean Black Belt</h4>
+                        <p><strong>The Secret:</strong> Use `AND`, `OR`, `NOT` to create recruiter-level searches and find exactly what you're looking for.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div id="quest2-incomplete"><h5>+75 XP</h5></div>
+                        <div id="quest2-complete" class="hidden"><i class="fas fa-check-circle fa-3x text-success"></i><h5 class="mt-2">Quest Complete!</h5></div>
+                    </div>
+                </div>
+                <div class="quest-builder mt-3">
+                    <div class="mb-2"><input type="text" id="bool-and" class="form-control" placeholder="MUST include (e.g., senior manager)"></div>
+                    <div class="mb-2"><input type="text" id="bool-or" class="form-control" placeholder="Can include ANY of (e.g., fintech payments)"></div>
+                    <div class="mb-2"><input type="text" id="bool-not" class="form-control" placeholder="EXCLUDE these (e.g., intern junior)"></div>
+                    <div class="d-grid"><button class="btn btn-success" id="buildAndUseQueryBtn">Build & Use Query</button></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quest 3: The Profile Power-Up -->
+        <div class="card quest-card mb-4" id="quest3">
+            <div class="card-body">
+                 <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h4 class="card-title">Quest: The Profile Power-Up</h4>
+                        <p><strong>The Secret:</strong> A keyword-optimized profile gets you found by recruiters. Your Headline and "About" section are prime real estate.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div id="quest3-incomplete"><h5>+100 XP</h5></div>
+                        <div id="quest3-complete" class="hidden"><i class="fas fa-check-circle fa-3x text-success"></i><h5 class="mt-2">Quest Complete!</h5></div>
+                    </div>
+                </div>
+                <div class="quest-builder mt-3">
+                    <div class="mb-3"><label class="form-label"><strong>1. Craft Your Headline</strong></label><input type="text" id="profile-headline" class="form-control" placeholder="e.g., Product Manager driving user growth in SaaS"></div>
+                    <div class="mb-3"><label class="form-label"><strong>2. Write Your "About" Summary</strong></label><textarea id="profile-about" class="form-control" rows="4" placeholder="Focus on your value and accomplishments"></textarea></div>
+                    <div class="d-grid"><button class="btn btn-success" id="completeQuest3Btn">Complete Profile Quest</button></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quest 4: The Network Navigator -->
+        <div class="card quest-card mb-4" id="quest4">
+            <div class="card-body">
+                 <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h4 class="card-title">Quest: The Network Navigator</h4>
+                        <p><strong>The Secret:</strong> Don't just apply to jobs, apply to people. Find recruiters and hiring managers at your target companies to stand out.</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <div id="quest4-incomplete"><h5>+100 XP</h5></div>
+                        <div id="quest4-complete" class="hidden"><i class="fas fa-check-circle fa-3x text-success"></i><h5 class="mt-2">Quest Complete!</h5></div>
+                    </div>
+                </div>
+                <div class="quest-builder mt-3">
+                    <div class="mb-3"><label class="form-label"><strong>Find Key Contacts at a Company</strong></label><input type="text" id="company-name-input" class="form-control" placeholder="e.g., Google, Microsoft"></div>
+                    <div class="d-grid"><button class="btn btn-success" id="findContactsBtn">Find Key Contacts</button></div>
+                </div>
             </div>
         </div>
     </div>
@@ -328,7 +240,7 @@
             <button type="button" class="btn-close position-absolute top-0 end-0 m-3" id="closeAnimationModalBtn"></button>
             <h3>The 'Last Hour' Trick Revealed!</h3>
             <div class="fake-browser">
-                <div class="address-bar" id="addressBar">.../search/?keywords=devops&f_TPR=<span id="urlParam" class="url-param">r86400</span></div>
+                <div class="address-bar" id="addressBar">.../search/?keywords=devops&f_TPR=<span class="url-param">r86400</span></div>
             </div>
             <div class="animation-text" id="animationText"></div>
             <button class="btn btn-success mt-3 hidden" id="modalCompleteBtn">Got It! Let's Try It!</button>
@@ -344,7 +256,7 @@
             // --- Game State ---
             let gameState = {
                 level: 1, xp: 0, xpForNextLevel: 200,
-                levelTitles: ["LinkedIn Novice", "Profile Polisher", "Search Specialist", "Networking Ninja", "LinkedIn Master"],
+                levelTitles: ["Novice", "Polisher", "Specialist", "Ninja", "Master"],
                 quests: {
                     quest1_completed: false, quest2_completed: false,
                     quest3_completed: false, quest4_completed: false,
@@ -354,59 +266,46 @@
 
             // --- DOM Element Cache ---
             const elements = {
-                // Dashboard
-                level: document.getElementById('level'),
+                // Navbar progress
                 levelTitle: document.getElementById('level-title'),
-                xp: document.getElementById('xp'),
-                xpNextLevel: document.getElementById('xp-next-level'),
+                xpText: document.getElementById('xp-text'),
                 xpProgressBar: document.getElementById('xp-progress-bar'),
                 badgesContainer: document.getElementById('badges-container'),
-                badgePrompt: document.getElementById('badge-prompt'),
-                // Link Generator
+                // Search Tool
+                searchToolAccordion: new bootstrap.Collapse(document.getElementById('collapseOne'), { toggle: false }),
                 generateLinkBtn: document.getElementById('generateLinkBtn'),
                 keywordsInput: document.getElementById('keywords'),
                 locationInput: document.getElementById('location'),
                 timePostedSelect: document.getElementById('time_posted'),
-                generatedLinkContainer: document.getElementById('generatedLinkContainer'),
-                generatedLinkTextarea: document.getElementById('generatedLink'),
                 // Animation Modal
                 animationModal: document.getElementById('animationModal'),
                 addressBar: document.getElementById('addressBar'),
                 animationText: document.getElementById('animationText'),
                 modalCompleteBtn: document.getElementById('modalCompleteBtn'),
                 closeAnimationModalBtn: document.getElementById('closeAnimationModalBtn'),
-                // Quest 1
+                // Quests
                 quest1: { card: document.getElementById('quest1'), incomplete: document.getElementById('quest1-incomplete'), complete: document.getElementById('quest1-complete'), startBtn: document.getElementById('startQuest1Btn') },
-                // Quest 2
                 quest2: { card: document.getElementById('quest2'), incomplete: document.getElementById('quest2-incomplete'), complete: document.getElementById('quest2-complete'), andInput: document.getElementById('bool-and'), orInput: document.getElementById('bool-or'), notInput: document.getElementById('bool-not'), buildBtn: document.getElementById('buildAndUseQueryBtn') },
-                // Quest 3
                 quest3: { card: document.getElementById('quest3'), incomplete: document.getElementById('quest3-incomplete'), complete: document.getElementById('quest3-complete'), headlineInput: document.getElementById('profile-headline'), aboutInput: document.getElementById('profile-about'), completeBtn: document.getElementById('completeQuest3Btn') },
-                // Quest 4
                 quest4: { card: document.getElementById('quest4'), incomplete: document.getElementById('quest4-incomplete'), complete: document.getElementById('quest4-complete'), companyInput: document.getElementById('company-name-input'), findBtn: document.getElementById('findContactsBtn') }
             };
 
             // --- UI Update Functions ---
             function updateUI() {
-                elements.level.textContent = gameState.level;
-                elements.levelTitle.textContent = gameState.levelTitles[gameState.level - 1] || "LinkedIn Legend";
-                elements.xp.textContent = gameState.xp;
-                elements.xpNextLevel.textContent = gameState.xpForNextLevel;
+                const levelName = gameState.levelTitles[gameState.level - 1] || "Legend";
+                elements.levelTitle.textContent = `Lvl ${gameState.level}: ${levelName}`;
+                elements.xpText.textContent = `${gameState.xp}/${gameState.xpForNextLevel} XP`;
                 const progress = Math.min((gameState.xp / gameState.xpForNextLevel) * 100, 100);
                 elements.xpProgressBar.style.width = `${progress}%`;
                 elements.xpProgressBar.setAttribute('aria-valuenow', progress);
 
                 elements.badgesContainer.innerHTML = '';
-                if (gameState.badges.length > 0) {
-                    elements.badgePrompt.classList.add('hidden');
-                    gameState.badges.forEach(b => {
-                        const badgeEl = document.createElement('span');
-                        badgeEl.className = 'badge-icon me-3';
-                        badgeEl.innerHTML = `<span title="${b.name}">${b.icon}</span>`;
-                        elements.badgesContainer.appendChild(badgeEl);
-                    });
-                } else {
-                    elements.badgePrompt.classList.remove('hidden');
-                }
+                gameState.badges.forEach(b => {
+                    const badgeEl = document.createElement('span');
+                    badgeEl.className = 'badge-icon ms-2';
+                    badgeEl.innerHTML = `<span title="${b.name}">${b.icon}</span>`;
+                    elements.badgesContainer.appendChild(badgeEl);
+                });
 
                 updateQuestAppearance(elements.quest1, gameState.quests.quest1_completed);
                 updateQuestAppearance(elements.quest2, gameState.quests.quest2_completed);
@@ -435,7 +334,7 @@
                     gameState.level++;
                     gameState.xp -= gameState.xpForNextLevel;
                     gameState.xpForNextLevel = Math.round(gameState.xpForNextLevel * 1.5);
-                    alert(`Congratulations! You've reached Level ${gameState.level}: ${gameState.levelTitles[gameState.level - 1]}!`);
+                    alert(`Congratulations! You've reached Level ${gameState.level}!`);
                 }
                 updateUI();
             }
@@ -461,8 +360,6 @@
                     sortBy: 'DD'
                 });
                 const url = `https://www.linkedin.com/jobs/search/?${params.toString()}`;
-                elements.generatedLinkTextarea.value = url;
-                elements.generatedLinkContainer.classList.remove('hidden');
                 window.open(url, '_blank');
             }
 
@@ -480,7 +377,8 @@
                     return;
                 }
                 elements.keywordsInput.value = query;
-                new bootstrap.Tab(document.getElementById('dashboard-tab')).show();
+                elements.searchToolAccordion.show();
+                elements.keywordsInput.focus();
             }
 
             function handleCompleteQuest3() {
@@ -505,30 +403,23 @@
 
             // --- Animation Modal ---
             function showAnimationModal() {
-                elements.animationModal.classList.remove('hidden');
                 elements.animationModal.classList.add('show');
                 startAnimationSequence();
             }
-
             function hideAnimationModal() {
                 elements.animationModal.classList.remove('show');
-                setTimeout(() => elements.animationModal.classList.add('hidden'), 300);
             }
-
             function startAnimationSequence() {
                 elements.modalCompleteBtn.classList.add('hidden');
-                elements.addressBar.innerHTML = `.../search/?keywords=devops&f_TPR=<span class="url-param">r86400</span>`;
+                elements.addressBar.innerHTML = `.../search/?f_TPR=<span class="url-param">r86400</span>`;
                 const urlParamSpan = elements.addressBar.querySelector('.url-param');
                 urlParamSpan.style.animation = 'none';
-
                 const steps = [
-                    { text: "LinkedIn's filter shows 'Past 24 hours'...", delay: 500 },
-                    { text: "In the URL, this is represented by `r86400` (86,400 seconds).", delay: 2500 },
+                    { text: "In a URL, 'Past 24 hours' is `r86400` (seconds).", delay: 500 },
                     { text: "Here's the trick: We can change this number!", delay: 2500, action: () => { urlParamSpan.style.animation = 'highlight-change 2s ease-in-out'; }},
-                    { text: "Let's change it to `r3600` for the last hour (3,600 seconds).", delay: 2500, action: () => { urlParamSpan.textContent = 'r3600'; }},
+                    { text: "Let's change it to `r3600` for the last hour.", delay: 2500, action: () => { urlParamSpan.textContent = 'r3600'; }},
                     { text: "Now you can find the newest jobs before anyone else!", delay: 2500, action: () => { elements.modalCompleteBtn.classList.remove('hidden'); }}
                 ];
-
                 let cumulativeDelay = 0;
                 steps.forEach(step => {
                     setTimeout(() => {
@@ -541,7 +432,7 @@
 
             function finishQuest1Animation() {
                 hideAnimationModal();
-                new bootstrap.Tab(document.getElementById('dashboard-tab')).show();
+                elements.searchToolAccordion.show();
                 elements.timePostedSelect.value = 'r3600';
                 elements.keywordsInput.focus();
             }
