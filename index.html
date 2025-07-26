@@ -16,7 +16,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5; /* A slightly different gray */
+            background-color: #f0f2f5;
         }
         .navbar {
             box-shadow: 0 2px 4px rgba(0,0,0,.08);
@@ -64,8 +64,8 @@
              background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
              border-left-color: #4caf50;
         }
-        .boolean-builder {
-            background-color: rgba(255, 255, 255, 0.5);
+        .boolean-builder, .profile-builder {
+            background-color: rgba(255, 255, 255, 0.6);
             padding: 1rem;
             border-radius: .5rem;
             margin-top: 1rem;
@@ -106,11 +106,9 @@
             <!-- Dashboard View -->
             <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                  <div class="row">
-                    <!-- Left Column: Gamification Stats -->
                     <div class="col-lg-8">
                         <h1 class="mb-4">Your Dashboard</h1>
                         <div class="row">
-                            <!-- Level & XP -->
                             <div class="col-md-6 mb-4">
                                 <div class="card h-100">
                                     <div class="card-body">
@@ -119,31 +117,26 @@
                                         <p class="text-muted" id="level-title">LinkedIn Novice</p>
                                         <hr>
                                         <h6 class="card-subtitle mb-2 text-muted">Experience Points</h6>
-                                        <p class="fs-4"><span id="xp">50</span> / <span id="xp-next-level">200</span> XP</p>
+                                        <p class="fs-4"><span id="xp">0</span> / <span id="xp-next-level">200</span> XP</p>
                                         <div class="progress">
-                                            <div id="xp-progress-bar" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            <div id="xp-progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Badges -->
                             <div class="col-md-6 mb-4">
                                 <div class="card h-100">
                                     <div class="card-body">
                                         <h5 class="card-title">Achievements</h5>
-                                        <div class="d-flex justify-content-start align-items-center mt-3">
-                                            <span class="badge-icon me-3">🏆</span>
-                                            <span class="badge-icon me-3">🌟</span>
-                                            <span class="badge-icon me-3">💡</span>
+                                        <div class="d-flex justify-content-start align-items-center mt-3" id="badges-container">
+                                            <!-- Badges will be dynamically added here -->
                                         </div>
-                                        <p class="mt-3 text-muted">You've earned 3 badges. Keep it up!</p>
-                                        <a href="#" class="btn btn-outline-primary mt-2">View All Badges</a>
+                                        <p class="mt-3 text-muted">Complete quests to earn badges!</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Right Column: Deep Link Generator -->
                     <div class="col-lg-4">
                         <div class="card sticky-top" style="top: 80px;">
                             <div class="card-body">
@@ -179,8 +172,8 @@
 
             <!-- Quests View -->
             <div class="tab-pane fade" id="quests" role="tabpanel" aria-labelledby="quests-tab">
-                <h1 class="mb-4">The Art of the Search</h1>
-                <p class="lead mb-4">Master advanced search techniques to find hidden opportunities before anyone else.</p>
+                <h1 class="mb-4">Your Quests</h1>
+                <p class="lead mb-4">Complete these quests to level up your LinkedIn skills and earn XP!</p>
                 
                 <!-- Quest 1: The 'Last Hour' Advantage -->
                 <div class="card quest-card mb-4" id="quest1">
@@ -188,18 +181,17 @@
                         <div class="row align-items-center">
                             <div class="col-md-8">
                                 <h4 class="card-title">Quest: The "Last Hour" Advantage</h4>
-                                <p><strong>The Secret:</strong> LinkedIn's interface only shows filters for "Past 24 hours," but its system understands seconds. By using the parameter `f_TPR=r3600`, you can see jobs posted in the last 60 minutes. This gives you a massive competitive edge.</p>
-                                <p><strong>Your Mission:</strong> Generate a search link for any job title posted in the "Last Hour" to prove you've mastered this trick.</p>
+                                <p><strong>The Secret:</strong> Use the `f_TPR=r3600` parameter to find jobs posted in the last 60 minutes, giving you a massive competitive edge.</p>
+                                <p><strong>Your Mission:</strong> Generate a search link for any job posted in the "Last Hour".</p>
                             </div>
                             <div class="col-md-4 text-center">
                                 <div id="quest1-incomplete">
                                     <h5>+50 XP</h5>
-                                    <button class="btn btn-primary" id="completeQuest1Btn">Complete Quest</button>
+                                    <button class="btn btn-primary" id="completeQuest1Btn">Start Quest</button>
                                 </div>
                                 <div id="quest1-complete" class="hidden">
                                     <i class="fas fa-check-circle fa-3x text-success"></i>
                                     <h5 class="mt-2">Quest Complete!</h5>
-                                    <p class="text-success fw-bold">+50 XP Earned</p>
                                 </div>
                             </div>
                         </div>
@@ -212,8 +204,8 @@
                          <div class="row align-items-center">
                             <div class="col-md-8">
                                 <h4 class="card-title">Quest: The Boolean Black Belt</h4>
-                                <p><strong>The Secret:</strong> Use Boolean operators (`AND`, `OR`, `NOT`) to create recruiter-level searches. This lets you combine keywords and exclude irrelevant results with precision.</p>
-                                <p><strong>Your Mission:</strong> Use the builder below to construct a Boolean query, then run the search to earn your XP.</p>
+                                <p><strong>The Secret:</strong> Use `AND`, `OR`, `NOT` to create recruiter-level searches and find exactly what you're looking for.</p>
+                                <p><strong>Your Mission:</strong> Use the builder below to construct and run a Boolean search.</p>
                             </div>
                             <div class="col-md-4 text-center">
                                 <div id="quest2-incomplete">
@@ -223,27 +215,48 @@
                                 <div id="quest2-complete" class="hidden">
                                     <i class="fas fa-check-circle fa-3x text-success"></i>
                                     <h5 class="mt-2">Quest Complete!</h5>
-                                    <p class="text-success fw-bold">+75 XP Earned</p>
                                 </div>
                             </div>
                         </div>
                         <div class="boolean-builder mt-3">
-                            <h6 class="text-center">Boolean Query Builder</h6>
-                            <div class="mb-2">
-                                <label class="form-label small">Find jobs with <strong class="text-primary">ALL</strong> of these words (AND):</label>
-                                <input type="text" id="bool-and" class="form-control form-control-sm" placeholder="e.g., senior manager">
+                            <div class="mb-2"><input type="text" id="bool-and" class="form-control" placeholder="MUST include (e.g., senior manager)"></div>
+                            <div class="mb-2"><input type="text" id="bool-or" class="form-control" placeholder="Can include ANY of (e.g., fintech payments)"></div>
+                            <div class="mb-2"><input type="text" id="bool-not" class="form-control" placeholder="EXCLUDE these (e.g., intern junior)"></div>
+                            <div class="d-grid"><button class="btn btn-success" id="buildAndUseQueryBtn">Build & Use Query</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quest 3: The Profile Power-Up -->
+                <div class="card quest-card mb-4" id="quest3">
+                    <div class="card-body">
+                         <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="card-title">Quest: The Profile Power-Up</h4>
+                                <p><strong>The Secret:</strong> A keyword-optimized profile gets you found by recruiters. Your Headline and "About" section are prime real estate.</p>
+                                <p><strong>Your Mission:</strong> Draft a new Headline and "About" section below to make your profile shine.</p>
                             </div>
-                             <div class="mb-2">
-                                <label class="form-label small">Find jobs with <strong class="text-success">ANY</strong> of these words (OR):</label>
-                                <input type="text" id="bool-or" class="form-control form-control-sm" placeholder="e.g., fintech OR payments">
+                            <div class="col-md-4 text-center">
+                                <div id="quest3-incomplete">
+                                    <h5>+100 XP</h5>
+                                    <p>Complete the mission to earn</p>
+                                </div>
+                                <div id="quest3-complete" class="hidden">
+                                    <i class="fas fa-check-circle fa-3x text-success"></i>
+                                    <h5 class="mt-2">Quest Complete!</h5>
+                                </div>
                             </div>
-                             <div class="mb-2">
-                                <label class="form-label small"><strong class="text-danger">EXCLUDE</strong> these words (NOT):</label>
-                                <input type="text" id="bool-not" class="form-control form-control-sm" placeholder="e.g., intern OR junior">
+                        </div>
+                        <div class="profile-builder mt-3">
+                            <div class="mb-3">
+                                <label class="form-label"><strong>1. Craft Your Headline</strong> (e.g., "Product Manager driving user growth in SaaS")</label>
+                                <input type="text" id="profile-headline" class="form-control">
                             </div>
-                            <div class="d-grid">
-                                <button class="btn btn-success btn-sm" id="buildAndUseQueryBtn">Build & Use Query</button>
+                            <div class="mb-3">
+                                 <label class="form-label"><strong>2. Write Your "About" Summary</strong> (Focus on your value and accomplishments)</label>
+                                <textarea id="profile-about" class="form-control" rows="4"></textarea>
                             </div>
+                            <div class="d-grid"><button class="btn btn-success" id="completeQuest3Btn">Complete Profile Quest</button></div>
                         </div>
                     </div>
                 </div>
@@ -272,7 +285,9 @@
             quests: {
                 quest1_completed: false,
                 quest2_completed: false,
-            }
+                quest3_completed: false,
+            },
+            badges: []
         };
 
         // --- DOM Elements ---
@@ -288,6 +303,7 @@
         const xpEl = document.getElementById('xp');
         const xpNextLevelEl = document.getElementById('xp-next-level');
         const xpProgressBar = document.getElementById('xp-progress-bar');
+        const badgesContainer = document.getElementById('badges-container');
 
         // Quest 1 Elements
         const completeQuest1Btn = document.getElementById('completeQuest1Btn');
@@ -304,11 +320,19 @@
         const boolNotInput = document.getElementById('bool-not');
         const buildAndUseQueryBtn = document.getElementById('buildAndUseQueryBtn');
 
+        // Quest 3 Elements
+        const quest3Card = document.getElementById('quest3');
+        const quest3Incomplete = document.getElementById('quest3-incomplete');
+        const quest3Complete = document.getElementById('quest3-complete');
+        const profileHeadlineInput = document.getElementById('profile-headline');
+        const profileAboutInput = document.getElementById('profile-about');
+        const completeQuest3Btn = document.getElementById('completeQuest3Btn');
 
         /**
-         * Updates the UI with the current game state
+         * Updates the entire UI with the current game state
          */
         function updateUI() {
+            // Update Level and XP
             levelEl.textContent = gameState.level;
             levelTitleEl.textContent = gameState.levelTitles[gameState.level - 1] || "LinkedIn Legend";
             xpEl.textContent = gameState.xp;
@@ -317,71 +341,85 @@
             xpProgressBar.style.width = `${progressPercentage}%`;
             xpProgressBar.setAttribute('aria-valuenow', progressPercentage);
 
-            // Update quest 1 UI
-            if (gameState.quests.quest1_completed) {
-                quest1Card.classList.add('completed');
-                quest1Incomplete.classList.add('hidden');
-                quest1Complete.classList.remove('hidden');
-            }
-            // Update quest 2 UI
-            if (gameState.quests.quest2_completed) {
-                quest2Card.classList.add('completed');
-                quest2Incomplete.classList.add('hidden');
-                quest2Complete.classList.remove('hidden');
+            // Update Badges
+            badgesContainer.innerHTML = '';
+            gameState.badges.forEach(badge => {
+                const badgeEl = document.createElement('span');
+                badgeEl.className = 'badge-icon me-3';
+                badgeEl.innerHTML = badge.icon;
+                badgeEl.title = badge.name;
+                badgesContainer.appendChild(badgeEl);
+            });
+
+            // Update Quest UI states
+            updateQuestAppearance('quest1', gameState.quests.quest1_completed, quest1Card, quest1Incomplete, quest1Complete);
+            updateQuestAppearance('quest2', gameState.quests.quest2_completed, quest2Card, quest2Incomplete, quest2Complete);
+            updateQuestAppearance('quest3', gameState.quests.quest3_completed, quest3Card, quest3Incomplete, quest3Complete);
+        }
+
+        /**
+         * Helper to update the visual state of a quest card
+         */
+        function updateQuestAppearance(questId, isCompleted, cardEl, incompleteEl, completeEl) {
+            if (isCompleted) {
+                cardEl.classList.add('completed');
+                incompleteEl.classList.add('hidden');
+                completeEl.classList.remove('hidden');
             }
         }
 
         /**
-         * Adds XP and checks for level up
-         * @param {number} amount - The amount of XP to add.
+         * Adds XP, checks for level up, and awards badges
          */
-        function addXp(amount) {
-            gameState.xp += amount;
-            // Simple level up logic
+        function completeQuest(questId, xpAmount, badge) {
+            if (gameState.quests[questId]) return; // Already completed
+
+            gameState.quests[questId] = true;
+            gameState.xp += xpAmount;
+            
+            if (badge && !gameState.badges.some(b => b.id === badge.id)) {
+                gameState.badges.push(badge);
+            }
+
+            alert(`Quest Complete! You earned ${xpAmount} XP and the ${badge.name} badge!`);
+
+            // Check for level up
             if (gameState.xp >= gameState.xpForNextLevel) {
                 gameState.level++;
-                gameState.xp = gameState.xp - gameState.xpForNextLevel;
-                gameState.xpForNextLevel = Math.round(gameState.xpForNextLevel * 1.5); // Increase XP requirement for next level
+                gameState.xp -= gameState.xpForNextLevel;
+                gameState.xpForNextLevel = Math.round(gameState.xpForNextLevel * 1.5);
+                alert(`Congratulations! You've reached Level ${gameState.level}!`);
             }
             updateUI();
         }
 
         /**
-         * Generates the LinkedIn job search URL based on user inputs.
+         * Generates the LinkedIn job search URL and completes quests
          */
         function generateLink() {
             const keywords = keywordsInput.value.trim();
-            const location = locationInput.value.trim();
-            const timePosted = timePostedSelect.value;
-
             if (!keywords) {
                 alert('Please enter keywords for your job search.');
                 return;
             }
 
-            // Check if this action completes Quest 1
-            if (timePosted === 'r3600' && !gameState.quests.quest1_completed) {
-                gameState.quests.quest1_completed = true;
-                addXp(50);
-                alert('Quest 1 Complete! You earned 50 XP for mastering the "Last Hour" trick!');
+            // Quest 1 Completion
+            if (timePostedSelect.value === 'r3600') {
+                completeQuest('quest1_completed', 50, {id: 'time-traveler', name: 'Time Traveler', icon: '⏱️'});
             }
 
-            // Check if this action completes Quest 2
+            // Quest 2 Completion
             const isBooleanQuery = keywords.includes('AND') || keywords.includes('OR') || keywords.includes('NOT');
-            if (isBooleanQuery && !gameState.quests.quest2_completed) {
-                 gameState.quests.quest2_completed = true;
-                 addXp(75);
-                 alert('Quest 2 Complete! You earned 75 XP for becoming a Boolean Black Belt!');
+            if (isBooleanQuery) {
+                 completeQuest('quest2_completed', 75, {id: 'master-searcher', name: 'Master Searcher', icon: '🔍'});
             }
 
-            const params = new URLSearchParams();
-            params.append('keywords', keywords);
-            if (location) {
-                params.append('location', location);
-            }
-            params.append('f_TPR', timePosted);
-            params.append('sortBy', 'DD'); 
-
+            const params = new URLSearchParams({
+                keywords: keywords,
+                location: locationInput.value.trim(),
+                f_TPR: timePostedSelect.value,
+                sortBy: 'DD'
+            });
             const fullUrl = `https://www.linkedin.com/jobs/search/?${params.toString()}`;
 
             generatedLinkTextarea.value = fullUrl;
@@ -389,28 +427,13 @@
             window.open(fullUrl, '_blank');
         }
 
-        /**
-         * Navigates user to dashboard to complete Quest 1.
-         */
         function handleCompleteQuest1() {
             const dashboardTab = new bootstrap.Tab(document.getElementById('dashboard-tab'));
             dashboardTab.show();
-            keywordsInput.focus();
             timePostedSelect.value = 'r3600';
-
-            const guideAlert = document.createElement('div');
-            guideAlert.className = 'alert alert-info alert-dismissible fade show';
-            guideAlert.role = 'alert';
-            guideAlert.innerHTML = `
-                <strong>Great!</strong> Now, just type your desired keywords and hit "Generate & Open Link" to complete your quest.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            `;
-            document.getElementById('dashboard').prepend(guideAlert);
+            keywordsInput.focus();
         }
         
-        /**
-         * Builds a boolean query string and moves the user to the dashboard.
-         */
         function buildAndUseQuery() {
             const andTerms = boolAndInput.value.trim().split(' ').filter(Boolean).join(' AND ');
             const orTerms = boolOrInput.value.trim().split(' ').filter(Boolean).join(' OR ');
@@ -427,27 +450,27 @@
                 alert("Please enter at least one term in the builder.");
                 return;
             }
-
             keywordsInput.value = finalQuery;
-            
             const dashboardTab = new bootstrap.Tab(document.getElementById('dashboard-tab'));
             dashboardTab.show();
-            
-            const guideAlert = document.createElement('div');
-            guideAlert.className = 'alert alert-success alert-dismissible fade show';
-            guideAlert.role = 'alert';
-            guideAlert.innerHTML = `
-                <strong>Awesome!</strong> Your Boolean query has been built. Now just hit "Generate & Open Link" to complete your quest.
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            `;
-            document.getElementById('dashboard').prepend(guideAlert);
         }
 
+        function handleCompleteQuest3() {
+            const headline = profileHeadlineInput.value.trim();
+            const about = profileAboutInput.value.trim();
+
+            if (!headline || !about) {
+                alert("Please fill out both the Headline and About section to complete the quest.");
+                return;
+            }
+            completeQuest('quest3_completed', 100, {id: 'profile-pro', name: 'Profile Pro', icon: '👤'});
+        }
 
         // --- Event Listeners ---
         generateLinkBtn.addEventListener('click', generateLink);
         completeQuest1Btn.addEventListener('click', handleCompleteQuest1);
         buildAndUseQueryBtn.addEventListener('click', buildAndUseQuery);
+        completeQuest3Btn.addEventListener('click', handleCompleteQuest3);
 
         // --- Initial Load ---
         document.addEventListener('DOMContentLoaded', () => {
