@@ -10,23 +10,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f0f2f5; /* A slightly different gray */
         }
         .navbar {
-            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,.08);
         }
         .card {
             border: none;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,.1);
-            transition: transform .2s;
+            border-radius: .75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1);
         }
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 14px 28px rgba(0,0,0,.25), 0 10px 10px rgba(0,0,0,.22);
         }
         .quest-title {
             color: #0a66c2; /* LinkedIn Blue */
@@ -34,6 +37,7 @@
         .btn-primary {
             background-color: #0a66c2;
             border-color: #0a66c2;
+            font-weight: 600;
         }
         .btn-primary:hover {
             background-color: #004182;
@@ -46,6 +50,23 @@
             font-size: 2rem;
             color: #ffc107;
         }
+        .nav-link {
+            font-weight: 600;
+        }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+            background-color: #0a66c2;
+        }
+        .quest-card {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            border-left: 5px solid #00796b;
+        }
+        .quest-card.completed {
+             background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+             border-left-color: #4caf50;
+        }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -53,23 +74,20 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold quest-title" href="#">LinkedIn Quest</a>
+            <a class="navbar-brand fw-bold quest-title" href="#"><i class="fas fa-shield-alt"></i> LinkedIn Quest</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Dashboard</a>
+                <ul class="nav nav-pills ms-auto" id="main-nav" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Quests</a>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="quests-tab" data-bs-toggle="tab" href="#quests" role="tab" aria-controls="quests" aria-selected="false">Quests</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Job Tracker</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="tracker-tab" data-bs-toggle="tab" href="#tracker" role="tab" aria-controls="tracker" aria-selected="false">Job Tracker</a>
                     </li>
                 </ul>
             </div>
@@ -77,89 +95,119 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-5">
-        <div class="row">
-
-            <!-- Left Column: Gamification Stats -->
-            <div class="col-lg-8">
-                <h1 class="mb-4">Your Dashboard</h1>
-                <div class="row">
-                    <!-- Level & XP -->
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">Your Level</h5>
-                                <p class="display-4 fw-bold">1</p>
-                                <p class="text-muted">LinkedIn Novice</p>
-                                <hr>
-                                <h6 class="card-subtitle mb-2 text-muted">Experience Points</h6>
-                                <p class="fs-4">50 / 200 XP</p>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    <div class="container mt-4">
+        <div class="tab-content" id="myTabContent">
+            <!-- Dashboard View -->
+            <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                 <div class="row">
+                    <!-- Left Column: Gamification Stats -->
+                    <div class="col-lg-8">
+                        <h1 class="mb-4">Your Dashboard</h1>
+                        <div class="row">
+                            <!-- Level & XP -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Your Level</h5>
+                                        <p class="display-4 fw-bold" id="level">1</p>
+                                        <p class="text-muted">LinkedIn Novice</p>
+                                        <hr>
+                                        <h6 class="card-subtitle mb-2 text-muted">Experience Points</h6>
+                                        <p class="fs-4"><span id="xp">50</span> / <span id="xp-next-level">200</span> XP</p>
+                                        <div class="progress">
+                                            <div id="xp-progress-bar" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Badges -->
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Achievements</h5>
+                                        <div class="d-flex justify-content-start align-items-center mt-3">
+                                            <span class="badge-icon me-3">🏆</span>
+                                            <span class="badge-icon me-3">🌟</span>
+                                            <span class="badge-icon me-3">💡</span>
+                                        </div>
+                                        <p class="mt-3 text-muted">You've earned 3 badges. Keep it up!</p>
+                                        <a href="#" class="btn btn-outline-primary mt-2">View All Badges</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Badges -->
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100">
+                    <!-- Right Column: Deep Link Generator -->
+                    <div class="col-lg-4">
+                        <div class="card sticky-top" style="top: 80px;">
                             <div class="card-body">
-                                <h5 class="card-title">Achievements</h5>
-                                <div class="d-flex justify-content-start align-items-center mt-3">
-                                    <span class="badge-icon me-3">🏆</span>
-                                    <span class="badge-icon me-3">🌟</span>
-                                    <span class="badge-icon me-3">💡</span>
+                                <h5 class="card-title text-center mb-4">🚀 LinkedIn Deep Link Generator</h5>
+                                <div class="mb-3">
+                                    <label for="keywords" class="form-label">Keywords</label>
+                                    <input type="text" class="form-control" id="keywords" placeholder="e.g., Product Manager">
                                 </div>
-                                <p class="mt-3 text-muted">You've earned 3 badges. Keep it up!</p>
-                                <a href="#" class="btn btn-outline-primary mt-2">View All Badges</a>
+                                <div class="mb-3">
+                                    <label for="location" class="form-label">Location</label>
+                                    <input type="text" class="form-control" id="location" placeholder="e.g., San Francisco">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="time_posted" class="form-label">Posted Within</label>
+                                    <select class="form-select" id="time_posted">
+                                        <option value="r3600" selected>Last Hour</option>
+                                        <option value="r86400">Last 24 Hours</option>
+                                        <option value="r604800">Last Week</option>
+                                    </select>
+                                </div>
+                                <div class="d-grid">
+                                    <button id="generateLinkBtn" class="btn btn-primary">Generate & Open Link</button>
+                                </div>
+                                <div id="generatedLinkContainer" class="mt-4 hidden">
+                                    <label class="form-label">Your Link:</label>
+                                    <textarea id="generatedLink" class="form-control" rows="3" readonly></textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Daily Challenges -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">Daily Challenge</h5>
-                        <p>Find one remote 'Software Engineer' job posted in the last hour.</p>
-                        <button class="btn btn-primary">Start Challenge</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Deep Link Generator -->
-            <div class="col-lg-4">
-                <div class="card sticky-top" style="top: 80px;">
+            <!-- Quests View -->
+            <div class="tab-pane fade" id="quests" role="tabpanel" aria-labelledby="quests-tab">
+                <h1 class="mb-4">The Art of the Search</h1>
+                <p class="lead mb-4">Master advanced search techniques to find hidden opportunities before anyone else.</p>
+                
+                <!-- Quest 1: The 'Last Hour' Advantage -->
+                <div class="card quest-card mb-4" id="quest1">
                     <div class="card-body">
-                        <h5 class="card-title text-center mb-4">🚀 LinkedIn Deep Link Generator</h5>
-                        
-                        <div class="mb-3">
-                            <label for="keywords" class="form-label">Keywords</label>
-                            <input type="text" class="form-control" id="keywords" placeholder="e.g., Product Manager">
-                        </div>
-                        <div class="mb-3">
-                            <label for="location" class="form-label">Location</label>
-                            <input type="text" class="form-control" id="location" placeholder="e.g., San Francisco">
-                        </div>
-                        <div class="mb-3">
-                            <label for="time_posted" class="form-label">Posted Within</label>
-                            <select class="form-select" id="time_posted">
-                                <option value="r3600" selected>Last Hour</option>
-                                <option value="r86400">Last 24 Hours</option>
-                                <option value="r604800">Last Week</option>
-                            </select>
-                        </div>
-
-                        <div class="d-grid">
-                            <button id="generateLinkBtn" class="btn btn-primary">Generate & Open Link</button>
-                        </div>
-                        
-                        <div id="generatedLinkContainer" class="mt-4" style="display: none;">
-                            <label class="form-label">Your Link:</label>
-                            <textarea id="generatedLink" class="form-control" rows="3" readonly></textarea>
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4 class="card-title">Quest: The "Last Hour" Advantage</h4>
+                                <p><strong>The Secret:</strong> LinkedIn's interface only shows filters for "Past 24 hours," but its system understands seconds. By using the parameter `f_TPR=r3600`, you can see jobs posted in the last 60 minutes. This gives you a massive competitive edge.</p>
+                                <p><strong>Your Mission:</strong> Generate a search link for any job title posted in the "Last Hour" to prove you've mastered this trick.</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div id="quest1-incomplete">
+                                    <h5>+50 XP</h5>
+                                    <button class="btn btn-primary" id="completeQuest1Btn">Complete Quest</button>
+                                </div>
+                                <div id="quest1-complete" class="hidden">
+                                    <i class="fas fa-check-circle fa-3x text-success"></i>
+                                    <h5 class="mt-2">Quest Complete!</h5>
+                                    <p class="text-success fw-bold">+50 XP Earned</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- More quests will be added here -->
+
+            </div>
+
+            <!-- Job Tracker View -->
+            <div class="tab-pane fade" id="tracker" role="tabpanel" aria-labelledby="tracker-tab">
+                <h1 class="mb-4">Job Tracker</h1>
+                <p class="text-center text-muted">This feature is coming soon!</p>
             </div>
         </div>
     </div>
@@ -169,6 +217,16 @@
     
     <!-- Custom JavaScript -->
     <script>
+        // --- Game State ---
+        let gameState = {
+            level: 1,
+            xp: 50,
+            xpForNextLevel: 200,
+            quests: {
+                quest1_completed: false
+            }
+        };
+
         // --- DOM Elements ---
         const generateLinkBtn = document.getElementById('generateLinkBtn');
         const keywordsInput = document.getElementById('keywords');
@@ -176,47 +234,120 @@
         const timePostedSelect = document.getElementById('time_posted');
         const generatedLinkContainer = document.getElementById('generatedLinkContainer');
         const generatedLinkTextarea = document.getElementById('generatedLink');
+        
+        const levelEl = document.getElementById('level');
+        const xpEl = document.getElementById('xp');
+        const xpNextLevelEl = document.getElementById('xp-next-level');
+        const xpProgressBar = document.getElementById('xp-progress-bar');
+
+        const completeQuest1Btn = document.getElementById('completeQuest1Btn');
+        const quest1Card = document.getElementById('quest1');
+        const quest1Incomplete = document.getElementById('quest1-incomplete');
+        const quest1Complete = document.getElementById('quest1-complete');
+
+        /**
+         * Updates the UI with the current game state
+         */
+        function updateUI() {
+            levelEl.textContent = gameState.level;
+            xpEl.textContent = gameState.xp;
+            xpNextLevelEl.textContent = gameState.xpForNextLevel;
+            const progressPercentage = (gameState.xp / gameState.xpForNextLevel) * 100;
+            xpProgressBar.style.width = `${progressPercentage}%`;
+            xpProgressBar.setAttribute('aria-valuenow', progressPercentage);
+
+            // Update quest UI
+            if (gameState.quests.quest1_completed) {
+                quest1Card.classList.add('completed');
+                quest1Incomplete.classList.add('hidden');
+                quest1Complete.classList.remove('hidden');
+            }
+        }
+
+        /**
+         * Adds XP and checks for level up
+         * @param {number} amount - The amount of XP to add.
+         */
+        function addXp(amount) {
+            gameState.xp += amount;
+            // Simple level up logic
+            if (gameState.xp >= gameState.xpForNextLevel) {
+                gameState.level++;
+                gameState.xp = gameState.xp - gameState.xpForNextLevel;
+                gameState.xpForNextLevel *= 1.5; // Increase XP requirement for next level
+            }
+            updateUI();
+        }
 
         /**
          * Generates the LinkedIn job search URL based on user inputs.
          */
         function generateLink() {
-            // Base URL for LinkedIn job search
-            const baseUrl = 'https://www.linkedin.com/jobs/search/';
-
-            // Get values from the form, trimming whitespace
             const keywords = keywordsInput.value.trim();
             const location = locationInput.value.trim();
             const timePosted = timePostedSelect.value;
 
-            // Check if keywords are provided
             if (!keywords) {
                 alert('Please enter keywords for your job search.');
                 return;
             }
 
-            // Construct the query parameters
+            // Check if this action completes Quest 1
+            if (timePosted === 'r3600' && !gameState.quests.quest1_completed) {
+                gameState.quests.quest1_completed = true;
+                addXp(50);
+                alert('Quest Complete! You earned 50 XP for mastering the "Last Hour" trick!');
+            }
+
             const params = new URLSearchParams();
             params.append('keywords', keywords);
             if (location) {
                 params.append('location', location);
             }
             params.append('f_TPR', timePosted);
-            params.append('sortBy', 'DD'); // Sort by date posted
+            params.append('sortBy', 'DD'); 
 
-            // Create the full URL
-            const fullUrl = `${baseUrl}?${params.toString()}`;
+            const fullUrl = `https://www.linkedin.com/jobs/search/?${params.toString()}`;
 
-            // Display the generated link
             generatedLinkTextarea.value = fullUrl;
-            generatedLinkContainer.style.display = 'block';
-
-            // Open the link in a new tab
+            generatedLinkContainer.classList.remove('hidden');
             window.open(fullUrl, '_blank');
+        }
+
+        /**
+         * Handles the click on the "Complete Quest" button.
+         * It navigates the user to the dashboard to perform the task.
+         */
+        function handleCompleteQuest1() {
+            // Switch to the dashboard tab
+            const dashboardTab = new bootstrap.Tab(document.getElementById('dashboard-tab'));
+            dashboardTab.show();
+
+            // Focus the keywords input to guide the user
+            keywordsInput.focus();
+            
+            // Set the time filter to "Last Hour"
+            timePostedSelect.value = 'r3600';
+
+            // Show a temporary message to guide the user
+            const guideAlert = document.createElement('div');
+            guideAlert.className = 'alert alert-info alert-dismissible fade show';
+            guideAlert.role = 'alert';
+            guideAlert.innerHTML = `
+                <strong>Great!</strong> Now, just type your desired keywords and hit "Generate & Open Link" to complete your quest.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            `;
+            document.getElementById('dashboard').prepend(guideAlert);
         }
 
         // --- Event Listeners ---
         generateLinkBtn.addEventListener('click', generateLink);
+        completeQuest1Btn.addEventListener('click', handleCompleteQuest1);
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUI();
+        });
     </script>
 </body>
 </html>
